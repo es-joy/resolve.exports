@@ -13,7 +13,7 @@ Let's have nice things.
 ## Install
 
 ```sh
-$ npm install resolve.exports
+$ npm install @es-joy/resolve.exports
 ```
 
 ## Usage
