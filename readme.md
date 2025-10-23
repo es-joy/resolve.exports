@@ -1,4 +1,4 @@
-# resolve.exports [![CI](https://github.com/lukeed/resolve.exports/workflows/CI/badge.svg)](https://github.com/lukeed/resolve.exports/actions) [![licenses](https://licenses.dev/b/npm/resolve.exports)](https://licenses.dev/npm/resolve.exports) [![codecov](https://codecov.io/gh/lukeed/resolve.exports/branch/master/graph/badge.svg?token=4P7d4Omw2h)](https://codecov.io/gh/lukeed/resolve.exports)
+# @es-joy/resolve.exports [![CI](https://github.com/es-joy/resolve.exports/workflows/CI/badge.svg)](https://github.com/es-joy/resolve.exports/actions) [![licenses](https://licenses.dev/b/npm/resolve.exports)](https://licenses.dev/npm/resolve.exports) [![codecov](https://codecov.io/gh/es-joy/resolve.exports/branch/master/graph/badge.svg?token=4P7d4Omw2h)](https://codecov.io/gh/es-joy/resolve.exports)
 
 > A tiny (952b), correct, general-purpose, and configurable `"exports"` and `"imports"` resolver without file-system reliance
 
@@ -21,7 +21,7 @@ $ npm install resolve.exports
 > Please see [`/test/`](/test) for examples.
 
 ```js
-import * as resolve from 'resolve.exports';
+import * as resolve from '@es-joy/resolve.exports';
 
 // package.json contents
 const pkg = {
@@ -170,7 +170,7 @@ A convenience helper which automatically reroutes to [`exports()`](#exportspkg-e
 When unspecified, `entry` defaults to the `"."` identifier, which means that `exports()` will be invoked.
 
 ```js
-import * as r from 'resolve.exports';
+import * as r from '@es-joy/resolve.exports';
 
 let pkg = {
   name: 'foobar',
@@ -422,7 +422,7 @@ A list of fields to accept. The order of the array determines the priority/impor
 By default, the `legacy()` method will accept any `"module"` and/or "main" fields if they are defined. However, if both fields are defined, then "module" will be returned.
 
 ```js
-import { legacy } from 'resolve.exports';
+import { legacy } from '@es-joy/resolve.exports';
 
 // package.json
 const pkg = {
@@ -464,4 +464,4 @@ legacy(pkg, {
 
 ## License
 
-MIT © [Luke Edwards](https://lukeed.com)
+MIT

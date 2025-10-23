@@ -2,7 +2,7 @@ import * as uvu from 'uvu';
 import * as assert from 'uvu/assert';
 import * as lib from '../src/index';
 
-import type * as t from 'resolve.exports';
+import type * as t from '@es-joy/resolve.exports';
 
 type Package = t.Package;
 type Entry = t.Exports.Entry | t.Imports.Entry;
@@ -646,7 +646,7 @@ describe('$.imports', it => {
 			}
 		};
 		pass(pkg, './src/asdf/css.ts', '#features/asdf/css.ts');
-	});	
+	});
 });
 
 describe('$.exports', it => {

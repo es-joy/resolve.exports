@@ -1,7 +1,7 @@
 {
-  "version": "2.0.3",
-  "name": "resolve.exports",
-  "repository": "lukeed/resolve.exports",
+  "version": "1.0.0",
+  "name": "@es-joy/resolve.exports",
+  "repository": "es-joy/resolve.exports",
   "description": "A tiny (952b), correct, general-purpose, and configurable \"exports\" and \"imports\" resolver without file-system reliance",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
@@ -12,10 +12,14 @@
     "email": "luke.edwards05@gmail.com",
     "url": "https://lukeed.com"
   },
+  "contributors": [
+    "Brett Zamir"
+  ],
   "engines": {
     "node": ">=10"
   },
   "scripts": {
+    "prepublishOnly": "npm run types && npm run build",
     "build": "bundt -m",
     "types": "tsc --noEmit",
     "test": "uvu -r tsm test"

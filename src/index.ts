@@ -1,5 +1,5 @@
 import { toEntry, walk } from './utils';
-import type * as t from 'resolve.exports';
+import type * as t from '@es-joy/resolve.exports';
 
 export { legacy } from './legacy';
 

@@ -2,7 +2,7 @@ import * as uvu from 'uvu';
 import * as assert from 'uvu/assert';
 import { legacy } from '../src/legacy';
 
-import type { Package } from 'resolve.exports';
+import type { Package } from '@es-joy/resolve.exports';
 
 function describe(
 	name: string,

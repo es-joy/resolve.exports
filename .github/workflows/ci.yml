@@ -22,8 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Node 10.x not supported by tsm & bundt
-        nodejs: [12, 14, 16, 18]
+        nodejs: [20, 22, 24]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
@@ -37,21 +36,21 @@ jobs:
       run: npm run types
 
     - name: Test
-      if: matrix.nodejs < 18
+      if: matrix.nodejs < 24
       run: npm test
-      
+
     - name: Test w/ Coverage
-      if: matrix.nodejs >= 18
+      if: matrix.nodejs >= 24
       run: |
         npm install -g nyc
         nyc --include=src npm test
 
     - name: Compile
-      if: matrix.nodejs >= 18
+      if: matrix.nodejs >= 24
       run: npm run build
 
     - name: Report
-      if: matrix.nodejs >= 18
+      if: matrix.nodejs >= 24
       run: |
         nyc report --reporter=text-lcov > coverage.lcov
         bash <(curl -s https://codecov.io/bash)

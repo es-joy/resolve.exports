@@ -10,10 +10,10 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "alwaysStrict": true,
-    "module": "esnext",
+    "module": "nodenext",
     "noEmit": true,
     "paths": {
-      "resolve.exports": ["./index.d.ts"]
+      "@es-joy/resolve.exports": ["./index.d.ts"]
     }
   },
   "include": [

@@ -1,5 +1,5 @@
 import * as $ from './utils';
-import type * as t from 'resolve.exports';
+import type * as t from '@es-joy/resolve.exports';
 
 type LegacyOptions = {
 	fields?: string[];

@@ -2,7 +2,7 @@ import * as uvu from 'uvu';
 import * as assert from 'uvu/assert';
 import * as $ from '../src/utils';
 
-import type * as t from 'resolve.exports';
+import type * as t from '@es-joy/resolve.exports';
 
 function describe(
 	name: string,

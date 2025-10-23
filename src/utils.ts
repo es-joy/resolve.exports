@@ -1,4 +1,4 @@
-import type * as t from 'resolve.exports';
+import type * as t from '@es-joy/resolve.exports';
 
 export type Entry = t.Exports.Entry | t.Imports.Entry;
 export type Value = t.Exports.Value | t.Imports.Value;
