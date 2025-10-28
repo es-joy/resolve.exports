@@ -1553,7 +1553,31 @@ describe('lib.types utility', it => {
 		assert.equal(out, ['./$types.$require']);
 	});
 
-	it('returns undefined when no types are present', () => {
+	it('finds nested typings under import/require and ignores normal targets', () => {
+		const pkg: Package = {
+			name: 'pkg',
+			exports: {
+				'.': {
+					"typings": {
+						"import": "./$typings.$import",
+						"require": "./$typings.$require"
+					},
+					"import": "./$import",
+					"require": "./$require"
+				}
+			}
+		};
+
+		// default prefers import branch
+		let out = (lib as any).types(pkg, '.');
+		assert.equal(out, ['./$typings.$import']);
+
+		// when require is requested, choose require branch
+		out = (lib as any).types(pkg, '.', { require: true });
+		assert.equal(out, ['./$typings.$require']);
+	});
+
+	it('returns undefined when no types or typings are present', () => {
 		const pkg: Package = {
 			name: 'pkg',
 			exports: {

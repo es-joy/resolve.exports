@@ -96,7 +96,8 @@ resolve.exports(pkg, 'foobar/lite', {
 // Types-only resolution
 // ---
 
-// Find only `types` entries, even when nested under conditions like `import`/`require`
+// Find only `types` entries (or its synonym `typings`), even when nested under
+//   conditions like `import`/`require`
 // Defaults to following the active branch (`import` by default, `require` when set)
 resolve.types({
   name: 'pkg',

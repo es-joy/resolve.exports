@@ -231,11 +231,14 @@ function loopTypes(m: Value, keys: Set<t.Condition>, result?: Set<string>, withi
 	if ('types' in m) {
 		const out = loopTypes((m as any)['types'] as Value, keys, result, true);
 		if (out && out.length) return out;
+	} else if ('typings' in m) {
+		const out = loopTypes((m as any)['typings'] as Value, keys, result, true);
+		if (out && out.length) return out;
 	}
 
 	// otherwise, traverse allowed condition branches in declared order
 	for (idx in m) {
-		if (idx === 'types') continue; // already handled
+		if (idx === 'types' || idx === 'types') continue; // already handled
 		if (keys.has(idx)) {
 			const out = loopTypes((m as any)[idx] as Value, keys, result, withinTypes);
 			if (out && out.length) return out;

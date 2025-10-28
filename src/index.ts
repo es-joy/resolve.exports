@@ -35,9 +35,9 @@ export function resolve(pkg: t.Package, input?: string, options?: t.Options): st
 }
 
 /**
- * Resolve only `types` entries within exports, even when nested under
+ * Resolve only `types` and `typings` entries within exports, even when nested under
  * condition branches like "import"/"require".
- * Returns undefined when no `types` are found for the entry.
+ * Returns undefined when no `types` or `typings` are found for the entry.
  */
 export function types(pkg: t.Package, input?: string, options?: t.Options): string[] | void {
 	let map = pkg.exports, k: string;
