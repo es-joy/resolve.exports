@@ -31,7 +31,7 @@ export function walk(name: string, mapping: Mapping, input: string, options?: t.
 	let c = conditions(options || {});
 
 	let m: Value|void = mapping[entry];
-	let v: string[]|void, replace: string|void;
+	let v: string[]|void, replace: string|void = undefined;
 
 	if (m === void 0) {
 		// loop for longest key match
