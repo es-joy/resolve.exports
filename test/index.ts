@@ -1468,6 +1468,40 @@ describe('options.conditions', it => {
 	});
 });
 
+describe('types', it => {
+	const pkg: Package = {
+		"name": "c",
+		"exports": {
+			".": {
+				"types": {
+					"import": "./$types.$import",
+					"require": "./$types.$require"
+				},
+				"import": "./$import",
+				"require": "./$require"
+			}
+		},
+	};
+
+	it('Finds import types', () => {
+		pass(pkg, './$types.$import', '.', {
+			conditions: ['!default', '!node', 'types']
+		});
+	});
+
+	it('Fails to find types', () => {
+		try {
+			lib.resolve(pkg, '.', {
+				conditions: ['!default', '!node',  '!import', 'types']
+			});
+			assert.unreachable();
+		} catch (err) {
+			assert.instance(err, Error);
+			assert.is((err as Error).message, `No known conditions for "." specifier in "c" package`);
+		}
+	});
+});
+
 describe('options.unsafe', it => {
 	let pkg: Package = {
 		"name": "unsafe",
