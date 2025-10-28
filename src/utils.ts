@@ -144,3 +144,101 @@ export function loop(m: Value, keys: Set<t.Condition>, result?: Set<string>): st
 		}
 	}
 }
+
+/**
+ * Walk mapping to find only `types` condition values.
+ * - Traverses allowed condition branches (`import`/`require`, `browser`/`node`, custom)
+ * - Only returns values discovered under a `types` condition
+ * - Ignores plain `import`/`require` string targets
+ */
+export function walkTypes(name: string, mapping: Mapping, input: string, options?: t.Options): string[] | void {
+	let entry = toEntry(name, input);
+	let c = conditions(options || {});
+
+	let m: Value|void = mapping[entry];
+	let v: string[]|void, replace: string|void = undefined;
+
+	if (m === void 0) {
+		// loop for longest key match (same as walk)
+		let match: RegExpExecArray|null;
+		let longest: Entry|undefined;
+		let tmp: string|number;
+		let key: Entry;
+
+		for (key in mapping) {
+			if (longest && key.length < longest.length) {
+				// do not allow "./" to match if already matched "./foo*" key
+			} else if (key[key.length - 1] === '/' && entry.startsWith(key)) {
+				replace = entry.substring(key.length);
+				longest = key;
+			} else if (key.length > 1) {
+				tmp = key.indexOf('*', 1);
+
+				if (!!~tmp) {
+					match = RegExp(
+						'^' + key.substring(0, tmp) + '(.*)' + key.substring(1+tmp) + '$'
+					).exec(entry);
+
+					if (match && match[1]) {
+						replace = match[1];
+						longest = key;
+					}
+				}
+			}
+		}
+
+		m = mapping[longest!];
+	}
+
+	if (!m) {
+		// missing export
+		throws(name, entry);
+	}
+
+	v = loopTypes(m, c);
+
+	// if not found, return void; do not error for missing "types"
+	if (!v) return;
+	if (replace) injects(v, replace);
+
+	return v;
+}
+
+function loopTypes(m: Value, keys: Set<t.Condition>, result?: Set<string>, withinTypes?: boolean): string[] | void {
+	if (m == null) return;
+
+	if (typeof m === 'string') {
+		if (withinTypes) {
+			if (result) result.add(m);
+			return [m];
+		}
+		return; // ignore non-`types` leaf strings
+	}
+
+	let idx: any;
+	let arr: Set<string>;
+
+	if (Array.isArray(m)) {
+		arr = result || new Set;
+		for (idx = 0; idx < m.length; idx++) {
+			loopTypes(m[idx], keys, arr, withinTypes);
+		}
+		if (!result && arr.size) return [...arr];
+		return; // nothing collected
+	}
+
+	// objects: prefer direct `types` key if present
+	if ('types' in m) {
+		const out = loopTypes((m as any)['types'] as Value, keys, result, true);
+		if (out && out.length) return out;
+	}
+
+	// otherwise, traverse allowed condition branches in declared order
+	for (idx in m) {
+		if (idx === 'types') continue; // already handled
+		if (keys.has(idx)) {
+			const out = loopTypes((m as any)[idx] as Value, keys, result, withinTypes);
+			if (out && out.length) return out;
+		}
+	}
+}

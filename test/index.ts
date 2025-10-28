@@ -1502,6 +1502,91 @@ describe('types', it => {
 	});
 });
 
+describe('lib.types utility', it => {
+	it('finds nested types under import/require', () => {
+		const pkg: Package = {
+			name: 'pkg',
+			exports: {
+				'.': {
+					import: {
+						types: './$nested.types.import',
+						default: './$normal.import'
+					},
+					require: {
+						types: './$nested.types.require',
+						default: './$normal.require'
+					}
+				}
+			}
+		};
+
+		// default prefers import branch
+		let out = (lib as any).types(pkg, '.');
+		assert.equal(out, ['./$nested.types.import']);
+
+		// when require is requested, choose require branch
+		out = (lib as any).types(pkg, '.', { require: true });
+		assert.equal(out, ['./$nested.types.require']);
+	});
+
+	it('finds nested types under import/require and ignores normal targets', () => {
+		const pkg: Package = {
+			name: 'pkg',
+			exports: {
+				'.': {
+					"types": {
+						"import": "./$types.$import",
+						"require": "./$types.$require"
+					},
+					"import": "./$import",
+					"require": "./$require"
+				}
+			}
+		};
+
+		// default prefers import branch
+		let out = (lib as any).types(pkg, '.');
+		assert.equal(out, ['./$types.$import']);
+
+		// when require is requested, choose require branch
+		out = (lib as any).types(pkg, '.', { require: true });
+		assert.equal(out, ['./$types.$require']);
+	});
+
+	it('returns undefined when no types are present', () => {
+		const pkg: Package = {
+			name: 'pkg',
+			exports: {
+				'.': {
+					import: './$only.import',
+					require: './$only.require'
+				}
+			}
+		};
+
+		const out = (lib as any).types(pkg, '.');
+		assert.is(out, undefined);
+	});
+
+	it('handles pattern keys and injects wildcard for types', () => {
+		const pkg: Package = {
+			name: 'pkg',
+			exports: {
+				'./features/*': {
+					import: { types: './types/*.d.ts' },
+					require: { types: './rtypes/*.d.ts' }
+				}
+			}
+		};
+
+		let out = (lib as any).types(pkg, 'features/hello');
+		assert.equal(out, ['./types/hello.d.ts']);
+
+		out = (lib as any).types(pkg, 'features/hello', { require: true });
+		assert.equal(out, ['./rtypes/hello.d.ts']);
+	});
+});
+
 describe('options.unsafe', it => {
 	let pkg: Package = {
 		"name": "unsafe",

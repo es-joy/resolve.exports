@@ -92,6 +92,34 @@ resolve.exports(pkg, 'foobar/lite', {
   browser: true
 }); //=> ["./lite/worker.browser.js"]
 
+// ---
+// Types-only resolution
+// ---
+
+// Find only `types` entries, even when nested under conditions like `import`/`require`
+// Defaults to following the active branch (`import` by default, `require` when set)
+resolve.types({
+  name: 'pkg',
+  exports: {
+    '.': {
+      import: { types: './index.d.ts', default: './index.mjs' },
+      require: { types: './index.cjs.d.ts', default: './index.cjs' }
+    }
+  }
+});
+//=> ["./index.d.ts"]
+
+resolve.types({
+  name: 'pkg',
+  exports: {
+    '.': {
+      import: { types: './index.d.ts', default: './index.mjs' },
+      require: { types: './index.cjs.d.ts', default: './index.cjs' }
+    }
+  }
+}, '.', { require: true });
+//=> ["./index.cjs.d.ts"]
+
 // Disable non-"default" condition activate
 // NOTE: breaks from Node.js default behavior
 // conditions: ["default", "custom"]
@@ -145,6 +173,7 @@ The [`resolve()`](#resolvepkg-entry-options), [`exports()`](#exportspkg-entry-op
 export function resolve(pkg: Package, entry?: string, options?: Options): string[] | undefined;
 export function exports(pkg: Package, entry?: string, options?: Options): string[] | undefined;
 export function imports(pkg: Package, target: string, options?: Options): string[] | undefined;
+export function types(pkg: Package, entry?: string, options?: Options): string[] | undefined;
 //                                         ^ not optional!
 ```
 

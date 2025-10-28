@@ -1,4 +1,4 @@
-import { toEntry, walk } from './utils';
+import { toEntry, walk, walkTypes } from './utils';
 import type * as t from '@es-joy/resolve.exports';
 
 export { legacy } from './legacy';
@@ -32,4 +32,23 @@ export function resolve(pkg: t.Package, input?: string, options?: t.Options): st
 	return input[0] === '#'
 		? imports(pkg, input, options)
 		: exports(pkg, input, options);
+}
+
+/**
+ * Resolve only `types` entries within exports, even when nested under
+ * condition branches like "import"/"require".
+ * Returns undefined when no `types` are found for the entry.
+ */
+export function types(pkg: t.Package, input?: string, options?: t.Options): string[] | void {
+	let map = pkg.exports, k: string;
+	if (!map) return;
+
+	if (typeof map === 'string') {
+		map = { '.': map };
+	} else for (k in map) {
+		if (k[0] !== '.') map = { '.': map };
+		break;
+	}
+
+	return walkTypes(pkg.name, map, input || '.', options);
 }

@@ -38,6 +38,12 @@ export function legacy<T=Package>(pkg: T, options?: {
 	fields?: readonly string[];
 }): Browser | string;
 
+/**
+ * Resolve only `types` entries within exports, even when nested under
+ * condition branches like "import"/"require". Returns undefined if not found.
+ */
+export function types<T=Package>(pkg: T, target?: string, options?: Options): Exports.Output | void;
+
 // ---
 
 /**
